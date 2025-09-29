@@ -29,7 +29,9 @@ public class FrmTratamiento extends javax.swing.JFrame {
     private final CitaDAO citaDAO = new CitaDAO();
     private final TratamientoDAO tratamientoDAO = new TratamientoDAO();
 
-
+    /**
+     * Creates new form FtmTratamiento
+     */
     public FrmTratamiento() {
         initComponents();
         cargarPacientes();
@@ -45,14 +47,14 @@ public class FrmTratamiento extends javax.swing.JFrame {
     }
 
     private void actualizarTablaTratamientos() {
-        List<Cita> citas = citaDAO.listar(); 
+        List<Cita> citas = citaDAO.listar(); // Todas las citas
 
         DefaultTableModel modelo = new DefaultTableModel(
                 new Object[]{"ID Tratamiento", "ID Cita", "Paciente", "Fecha", "Descripcion"}, 0
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 4; 
+                return column == 4; // Solo la columna Descripcion editable
             }
         };
 
@@ -282,6 +284,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
             return;
         }
 
+        // Tomamos la primera cita disponible
         Cita c = citas.get(0);
         String descripcion = taObservaciones.getText().trim();
         if (descripcion.isEmpty()) {

@@ -212,6 +212,7 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
             return;
         }
 
+        // Obtener el ID de la cita de la primera columna
         int idCita = (int) TbCitas.getValueAt(fila, 0);
 
         int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
@@ -227,6 +228,7 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
 
             javax.swing.JOptionPane.showMessageDialog(this, "Cita eliminada correctamente.");
 
+            // Volver a cargar la tabla
             Paciente seleccionado = (Paciente) cbPaciente.getSelectedItem();
             if (seleccionado != null) {
                 actualizarTablaCitas(seleccionado.getId());
@@ -243,6 +245,7 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
         }
 
         try {
+            // Leer los datos de la fila
             int idCita = (int) TbCitas.getValueAt(fila, 0);
 
             String pacienteNombre = (String) TbCitas.getValueAt(fila, 1);
@@ -251,6 +254,7 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
             String motivo = (String) TbCitas.getValueAt(fila, 4);
             String estado = (String) TbCitas.getValueAt(fila, 5);
 
+            // Buscar Paciente y Doctor por nombre (asumiendo que no se modifican los IDs)
             Paciente p = dao.listar().stream()
                     .filter(pa -> (pa.getNombre() + " " + pa.getApellido()).equals(pacienteNombre))
                     .findFirst()
@@ -266,6 +270,7 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
                 return;
             }
 
+            // Crear objeto cita actualizado
             Cita c = new Cita();
             c.setId(idCita);
             c.setPaciente(p);
@@ -274,10 +279,12 @@ public class FrmCitasConsultar extends javax.swing.JFrame {
             c.setMotivo(motivo);
             c.setEstado(estado);
 
+            // Llamar al DAO para actualizar
             daoc.actualizar(c);
 
             javax.swing.JOptionPane.showMessageDialog(this, "Cita actualizada correctamente.");
 
+            // Refrescar tabla
             Paciente seleccionado = (Paciente) cbPaciente.getSelectedItem();
             if (seleccionado != null) {
                 actualizarTablaCitas(seleccionado.getId());

@@ -14,6 +14,9 @@ import modelo.Paciente;
  */
 public class FrmPacientes extends javax.swing.JFrame {
 
+    /**
+     * Creates new form FrmPacientes
+     */
     public FrmPacientes() {
         initComponents();
     }
@@ -230,7 +233,7 @@ public class FrmPacientes extends javax.swing.JFrame {
     }//GEN-LAST:event_tfEdadActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        
+        // 1. Tomar datos de los campos
         String nombre = tfNombre.getText().trim();
         String apellido = tfApellido.getText().trim();
         String edadStr = tfEdad.getText().trim();
@@ -239,7 +242,7 @@ public class FrmPacientes extends javax.swing.JFrame {
         String telefonoStr = tfTelefono.getText().trim();
         String correo = tfCorreo.getText().trim();
 
-        
+        // 2. Validar campos vacíos
         if (nombre.isEmpty() || apellido.isEmpty() || edadStr.isEmpty() || sexo.isEmpty() ||
             direccion.isEmpty() || telefonoStr.isEmpty() || correo.isEmpty()) {
 
@@ -253,16 +256,21 @@ public class FrmPacientes extends javax.swing.JFrame {
         }
 
         try {
+            // 3. Convertir edad y teléfono a enteros
             int edad = Integer.parseInt(edadStr);
             int telefono = Integer.parseInt(telefonoStr);
 
+            // 4. Crear instancia de Paciente
             Paciente paciente = new Paciente(nombre, apellido, edad, sexo, direccion, telefono, correo);
 
+            // 5. Llamar al controlador
             ControlPacientes control = new ControlPacientes();
             boolean exito = control.agregarPaciente(paciente);
 
+            // 6. Mostrar resultado
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Paciente guardado correctamente.");
+                // Opcional: limpiar campos
                 tfNombre.setText("");
                 tfApellido.setText("");
                 tfEdad.setText("");

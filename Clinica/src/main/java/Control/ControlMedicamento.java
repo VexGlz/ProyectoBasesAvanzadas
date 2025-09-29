@@ -18,6 +18,7 @@ public class ControlMedicamento {
         this.medicamentoDAO = new MedicamentoDAO();
     }
 
+    // Insertar un nuevo medicamento con validaciones
     public boolean agregarMedicamento(Tratamiento tratamiento, String descripcion, String duracion, String cantidad) {
         if (tratamiento == null || tratamiento.getId_tratamiento() <= 0) {
             System.err.println("El tratamiento asociado es inválido.");
@@ -44,10 +45,15 @@ public class ControlMedicamento {
         return true;
     }
 
+    // Obtener un medicamento por ID (extra si lo necesitas, aunque no está en tu DAO)
+    // public Medicamento obtenerMedicamento(int idMedicamento) { ... }
+
+    // Obtener todos los medicamentos
     public List<Medicamento> listarMedicamentos() {
         return medicamentoDAO.listar();
     }
 
+    // Obtener medicamentos por tratamiento
     public List<Medicamento> listarMedicamentosPorTratamiento(int idTratamiento) {
         if (idTratamiento <= 0) {
             System.err.println("ID de tratamiento inválido.");
@@ -56,6 +62,7 @@ public class ControlMedicamento {
         return medicamentoDAO.listarPorTratamiento(idTratamiento);
     }
 
+    // Actualizar medicamento con validaciones
     public boolean actualizarMedicamento(int idMedicamento, Tratamiento tratamiento, String descripcion, String duracion, String cantidad) {
         if (idMedicamento <= 0) {
             System.err.println("ID de medicamento inválido.");
@@ -87,6 +94,7 @@ public class ControlMedicamento {
         return true;
     }
 
+    // Eliminar medicamento con validación de ID
     public boolean eliminarMedicamento(int idMedicamento) {
         if (idMedicamento <= 0) {
             System.err.println("ID de medicamento inválido.");

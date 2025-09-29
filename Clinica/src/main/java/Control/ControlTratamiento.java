@@ -13,6 +13,7 @@ public class ControlTratamiento {
         this.tratamientoDAO = new TratamientoDAO();
     }
 
+    // Insertar un nuevo tratamiento con validaciones
     public boolean agregarTratamiento(Cita cita, String descripcion) {
         if (cita == null || cita.getId() <= 0) {
             System.err.println("El tratamiento debe estar asociado a una cita válida.");
@@ -29,11 +30,13 @@ public class ControlTratamiento {
         tratamientoDAO.agregar(tratamiento);
         return true;
     }
-    
+
+    // Obtener todos los tratamientos
     public List<Tratamiento> listarTratamientos() {
         return tratamientoDAO.listar();
     }
 
+    // Actualizar tratamiento con validaciones
     public boolean actualizarTratamiento(int idTratamiento, Cita cita, String descripcion) {
         if (idTratamiento <= 0) {
             System.err.println("ID de tratamiento inválido.");
@@ -56,6 +59,7 @@ public class ControlTratamiento {
         return true;
     }
 
+    // Eliminar tratamiento con validación de ID
     public boolean eliminarTratamiento(int idTratamiento) {
         if (idTratamiento <= 0) {
             System.err.println("ID de tratamiento inválido.");

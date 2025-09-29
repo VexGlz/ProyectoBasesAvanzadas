@@ -12,6 +12,7 @@ public class ControlPacientes {
         this.pacienteDAO = new PacienteDAO();
     }
 
+    // Insertar un nuevo paciente con validaciones
     public boolean agregarPaciente(Paciente paciente) {
         if (paciente.getNombre() == null || paciente.getNombre().trim().isEmpty()) {
             System.err.println("El nombre del paciente no puede estar vacío.");
@@ -31,6 +32,7 @@ public class ControlPacientes {
         return true;
     }
 
+    // Obtener un paciente por ID
     public Paciente obtenerPaciente(int idPaciente) {
         if (idPaciente <= 0) {
             System.err.println("ID de paciente inválido.");
@@ -39,10 +41,12 @@ public class ControlPacientes {
         return pacienteDAO.obtenerPorId(idPaciente);
     }
 
+    // Obtener todos los pacientes
     public List<Paciente> listarPacientes() {
         return pacienteDAO.listar();
     }
-    
+
+    // Actualizar paciente con validaciones
     public boolean actualizarPaciente(Paciente paciente) {
         if (paciente.getId() <= 0) {
             System.err.println("ID de paciente inválido.");
@@ -65,6 +69,7 @@ public class ControlPacientes {
         return true;
     }
 
+    // Eliminar paciente con validación de ID
     public boolean eliminarPaciente(int idPaciente) {
         if (idPaciente <= 0) {
             System.err.println("ID de paciente inválido.");

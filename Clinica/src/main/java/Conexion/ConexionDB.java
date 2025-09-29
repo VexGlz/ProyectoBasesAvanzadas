@@ -38,6 +38,7 @@ public class ConexionDB {
             password = props.getProperty("db.password");
             driver = props.getProperty("db.driver");
 
+            // Registrar driver
             Class.forName(driver);
             
             String sqlPacientes = "CREATE TABLE IF NOT EXISTS Pacientes ("

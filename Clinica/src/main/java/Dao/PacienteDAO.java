@@ -90,7 +90,7 @@ public class PacienteDAO implements IPacienteDAO {
                 p.setSexo(rs.getString("sexo"));
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getInt("telefono"));
-                p.setCorreo(rs.getString("corrreo"));
+                p.setCorreo(rs.getString("correo"));
             }
 
         } catch (SQLException e) {
