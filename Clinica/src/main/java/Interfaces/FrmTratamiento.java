@@ -47,6 +47,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
         cbPaciente.setModel(modelo);
     }
 
+<<<<<<< HEAD
     private void cargarCitasPacientes(int idPaciente) {
         List<Cita> citas = citaDAO.listarPorPaciente(idPaciente);
         DefaultTableModel modelo = new DefaultTableModel(
@@ -69,6 +70,10 @@ public class FrmTratamiento extends javax.swing.JFrame {
         TbCitasPaciente.setModel(modelo);
         citaSelec = null;
     }
+=======
+    private void actualizarTablaTratamientos() {
+        List<Cita> citas = citaDAO.listar(); // Todas las citas
+>>>>>>> 9df1de2cd2ca02ad56345db6ae4a26cb7fb75833
 
     private void actualizarTablaTratamientos() {
        List<Cita> citas = citaDAO.listar();
@@ -77,7 +82,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 4; 
+                return column == 4; // Solo la columna Descripcion editable
             }
         };
         for (Cita c : citas) {
@@ -322,6 +327,18 @@ public class FrmTratamiento extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona una cita de la tabla de citas del paciente.");
             return;
         }
+<<<<<<< HEAD
+=======
+
+        List<Cita> citas = citaDAO.listarPorPaciente(paciente.getId());
+        if (citas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El paciente no tiene citas.");
+            return;
+        }
+
+        // Tomamos la primera cita disponible
+        Cita c = citas.get(0);
+>>>>>>> 9df1de2cd2ca02ad56345db6ae4a26cb7fb75833
         String descripcion = taObservaciones.getText().trim();
         if (descripcion.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingresa la descripción del tratamiento.");

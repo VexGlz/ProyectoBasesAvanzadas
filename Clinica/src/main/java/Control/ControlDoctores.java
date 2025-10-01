@@ -17,6 +17,7 @@ public class ControlDoctores {
         this.doctorDAO = new DoctorDAO();
     }
 
+    // Insertar un nuevo doctor con validaciones
     public boolean agregarDoctor(String nombre, String apellido, String correo, int telefono, String especialidad) {
         if (nombre == null || nombre.trim().isEmpty()) {
             System.err.println("El nombre del doctor no puede estar vacío.");
@@ -44,6 +45,7 @@ public class ControlDoctores {
         return true;
     }
 
+    // Obtener un doctor por ID
     public Doctor obtenerDoctor(int idDoctor) {
         if (idDoctor <= 0) {
             System.err.println("ID de doctor inválido.");
@@ -52,10 +54,12 @@ public class ControlDoctores {
         return doctorDAO.obtenerPorId(idDoctor);
     }
 
+    // Obtener todos los doctores
     public List<Doctor> listarDoctores() {
         return doctorDAO.listar();
     }
 
+    // Actualizar doctor con validaciones
     public boolean actualizarDoctor(int idDoctor, String nombre, String apellido, String correo, int telefono, String especialidad) {
         if (idDoctor <= 0) {
             System.err.println("ID de doctor inválido.");
@@ -88,6 +92,7 @@ public class ControlDoctores {
         return true;
     }
 
+    // Eliminar doctor con validación de ID
     public boolean eliminarDoctor(int idDoctor) {
         if (idDoctor <= 0) {
             System.err.println("ID de doctor inválido.");

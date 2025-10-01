@@ -192,12 +192,14 @@ public class FrmCitas extends javax.swing.JFrame {
 
     private void btnConfirmarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarCitaActionPerformed
 
+        // 1. Tomar datos de los campos
         String doctor = cbDoctor.getSelectedItem().toString().trim();
         String paciente = cbPaciente.getSelectedItem().toString().trim();
         String motivo = tfMotivo.getText().trim();
         String fecha = tfFecha.getText().trim();
         String estado = tfEstado.getText().trim();
 
+        // 2. Validar campos vacíos
         if (doctor.isEmpty() || paciente.isEmpty() || motivo.isEmpty() || fecha.isEmpty() || estado.isEmpty()) {
 
             JOptionPane.showMessageDialog(
@@ -211,7 +213,12 @@ public class FrmCitas extends javax.swing.JFrame {
 
         try {
 
+<<<<<<< HEAD
          
+=======
+            // 4. Crear instancia de Paciente
+            // 5. Llamar al controlador
+>>>>>>> 9df1de2cd2ca02ad56345db6ae4a26cb7fb75833
             ControlCita control = new ControlCita();
             Paciente pacienteSeleccionado = (Paciente) cbPaciente.getSelectedItem();
             Doctor doctorSeleccionado = (Doctor) cbDoctor.getSelectedItem();
@@ -221,8 +228,10 @@ public class FrmCitas extends javax.swing.JFrame {
 
             boolean exito = control.agregarCita(pacienteSeleccionado, doctorSeleccionado, fecha, motivo, estado);
 
+            // 6. Mostrar resultado
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
+                // Opcional: limpiar campos
                 tfFecha.setText("");
                 tfMotivo.setText("");
                 tfEstado.setText("");

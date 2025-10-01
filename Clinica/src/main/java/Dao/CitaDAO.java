@@ -114,6 +114,7 @@ public class CitaDAO implements ICitaDAO {
                 Cita c = new Cita();
                 c.setId(rs.getInt("id"));
 
+                // Buscar paciente y doctor usando DAOs
                 Paciente p = pacienteDAO.obtenerPorId(rs.getInt("id_paciente"));
                 Doctor d = doctorDAO.obtenerPorId(rs.getInt("id_doctor"));
 

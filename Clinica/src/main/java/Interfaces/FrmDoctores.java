@@ -213,12 +213,14 @@ public class FrmDoctores extends javax.swing.JFrame {
 
     private void BotonCitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCitasActionPerformed
 
+        // 1. Tomar datos de los campos
         String nombre = tfNombre.getText().trim();
         String apellido = tfApellido.getText().trim();
         String especialidad = tfEspecialidad.getText().trim();
         String telefonoStr = tfTelefono.getText().trim();
         String correo = tfCorreo.getText().trim();
 
+        // 2. Validar campos vacíos
         if (nombre.isEmpty() || apellido.isEmpty() || especialidad.isEmpty() || telefonoStr.isEmpty() || correo.isEmpty()) {
 
             JOptionPane.showMessageDialog(
@@ -231,15 +233,25 @@ public class FrmDoctores extends javax.swing.JFrame {
         }
 
         try {
+            // 3. Convertir edad y teléfono a enteros
             int telefono = Integer.parseInt(telefonoStr);
 
 
 
+<<<<<<< HEAD
+=======
+            // 5. Llamar al controlador
+>>>>>>> 9df1de2cd2ca02ad56345db6ae4a26cb7fb75833
             ControlDoctores control = new ControlDoctores();
             boolean exito = control.agregarDoctor(nombre, apellido, especialidad, telefono, correo);
 
+            // 6. Mostrar resultado
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Doctor guardado correctamente.");
+<<<<<<< HEAD
+=======
+                // Opcional: limpiar campos
+>>>>>>> 9df1de2cd2ca02ad56345db6ae4a26cb7fb75833
                 tfNombre.setText("");
                 tfApellido.setText("");
                 tfEspecialidad.setText("");
