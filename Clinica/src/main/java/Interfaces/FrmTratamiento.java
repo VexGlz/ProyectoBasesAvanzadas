@@ -4,13 +4,10 @@
  */
 package Interfaces;
 
-import Control.ControlCita;
-import Control.ControlPacientes;
 import Control.ControlTratamiento;
 import Dao.CitaDAO;
 import Dao.PacienteDAO;
 import Dao.TratamientoDAO;
-import static java.awt.SystemColor.control;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -28,25 +25,53 @@ public class FrmTratamiento extends javax.swing.JFrame {
     private final PacienteDAO pacienteDAO = new PacienteDAO();
     private final CitaDAO citaDAO = new CitaDAO();
     private final TratamientoDAO tratamientoDAO = new TratamientoDAO();
+    private final ControlTratamiento controlTratamiento = new ControlTratamiento(); // Instanciar el controlador
+    private Cita citaSelec = null;
 
-
+    /**
+     * Creates new form FtmTratamiento
+     */
     public FrmTratamiento() {
         initComponents();
         cargarPacientes();
+        actualizarTablaTratamientos();
     }
 
     private void cargarPacientes() {
         List<Paciente> pacientes = pacienteDAO.listar();
         DefaultComboBoxModel<Paciente> modelo = new DefaultComboBoxModel<>();
+        modelo.addElement(null);
         for (Paciente p : pacientes) {
             modelo.addElement(p);
         }
         cbPaciente.setModel(modelo);
     }
 
-    private void actualizarTablaTratamientos() {
-        List<Cita> citas = citaDAO.listar(); 
+    private void cargarCitasPacientes(int idPaciente) {
+        List<Cita> citas = citaDAO.listarPorPaciente(idPaciente);
+        DefaultTableModel modelo = new DefaultTableModel(
+                new Object[]{"ID Cita", "Doctor", "Fecha", "Motivo", "Estado"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Cita c : citas) {
+            modelo.addRow(new Object[]{
+                c.getId(),
+                c.getDoctor() != null ? c.getDoctor().getNombre() + " " + c.getDoctor().getApellido() : "N/A",
+                c.getFecha(),
+                c.getMotivo(),
+                c.getEstado()
+            });
+        }
+        TbCitasPaciente.setModel(modelo);
+        citaSelec = null;
+    }
 
+    private void actualizarTablaTratamientos() {
+       List<Cita> citas = citaDAO.listar();
         DefaultTableModel modelo = new DefaultTableModel(
                 new Object[]{"ID Tratamiento", "ID Cita", "Paciente", "Fecha", "Descripcion"}, 0
         ) {
@@ -55,7 +80,6 @@ public class FrmTratamiento extends javax.swing.JFrame {
                 return column == 4; 
             }
         };
-
         for (Cita c : citas) {
             List<Tratamiento> tratamientos = tratamientoDAO.listarPorCita(c.getId());
             for (Tratamiento t : tratamientos) {
@@ -68,7 +92,6 @@ public class FrmTratamiento extends javax.swing.JFrame {
                 });
             }
         }
-
         TbTrataminetos.setModel(modelo);
     }
 
@@ -97,6 +120,8 @@ public class FrmTratamiento extends javax.swing.JFrame {
         btnConfirmar1 = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnMenu = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TbCitasPaciente = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,7 +142,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
         jScrollPane1.setViewportView(taObservaciones);
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        btnEliminar.setText("ELIMINAR");
+        btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -135,19 +160,19 @@ public class FrmTratamiento extends javax.swing.JFrame {
 
         TbTrataminetos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane2.setViewportView(TbTrataminetos);
 
         btnConfirmar1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        btnConfirmar1.setText("CONFIRMAR");
+        btnConfirmar1.setText("Confirmar");
         btnConfirmar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmar1ActionPerformed(evt);
@@ -170,17 +195,32 @@ public class FrmTratamiento extends javax.swing.JFrame {
             }
         });
 
+        TbCitasPaciente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(TbCitasPaciente);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)))
+                            .addComponent(jLabel4)
+                            .addComponent(btnConfirmar1)
+                            .addComponent(btnMenu)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -191,40 +231,35 @@ public class FrmTratamiento extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfDosis, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                            .addComponent(tfMedicamento)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(btnConfirmar1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                            .addComponent(tfMedicamento))))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnEliminar)
+                            .addGap(29, 29, 29)
+                            .addComponent(btnActualizar)
+                            .addGap(248, 248, 248))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnEliminar)
-                        .addGap(92, 92, 92)
-                        .addComponent(btnActualizar))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36))))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(235, 235, 235)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(297, 297, 297)
-                        .addComponent(btnMenu)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(235, 235, 235)
+                .addComponent(jLabel1))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(cbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(cbPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tfMedicamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
@@ -232,27 +267,38 @@ public class FrmTratamiento extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfDosis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnConfirmar1))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
+                        .addComponent(btnConfirmar1)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnMenu))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar)
                     .addComponent(btnActualizar))
-                .addGap(18, 18, 18)
-                .addComponent(btnMenu)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(47, 47, 47))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPacienteActionPerformed
-        // TODO add your handling code here:
+        Paciente pacienteSeleccionado = (Paciente) cbPaciente.getSelectedItem();
+        if (pacienteSeleccionado != null) {
+            cargarCitasPacientes(pacienteSeleccionado.getId());
+        } else {
+            ((DefaultTableModel) TbCitasPaciente.getModel()).setRowCount(0);
+            citaSelec = null; // Resetear la cita seleccionada
+        }
     }//GEN-LAST:event_cbPacienteActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -261,28 +307,21 @@ public class FrmTratamiento extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecciona un tratamiento de la tabla.");
             return;
         }
-
         int idTratamiento = (int) TbTrataminetos.getValueAt(fila, 0);
-        tratamientoDAO.eliminar(idTratamiento);
-        JOptionPane.showMessageDialog(this, "Tratamiento eliminado.");
-        actualizarTablaTratamientos();
+        int confirmacion = JOptionPane.showConfirmDialog(this, "Seguro que quieres eliminar este tratamiento?", "", JOptionPane.YES_NO_OPTION);
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            tratamientoDAO.eliminar(idTratamiento);
+            JOptionPane.showMessageDialog(this, "Tratamiento eliminado.");
+            actualizarTablaTratamientos();
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 
     private void btnConfirmar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmar1ActionPerformed
-        Paciente paciente = (Paciente) cbPaciente.getSelectedItem();
-        if (paciente == null) {
-            JOptionPane.showMessageDialog(this, "Selecciona un paciente.");
+        if (citaSelec == null) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cita de la tabla de citas del paciente.");
             return;
         }
-
-        List<Cita> citas = citaDAO.listarPorPaciente(paciente.getId());
-        if (citas.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El paciente no tiene citas.");
-            return;
-        }
-
-        Cita c = citas.get(0);
         String descripcion = taObservaciones.getText().trim();
         if (descripcion.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingresa la descripción del tratamiento.");
@@ -290,13 +329,20 @@ public class FrmTratamiento extends javax.swing.JFrame {
         }
 
         Tratamiento t = new Tratamiento();
-        t.setCita(c);
+        t.setCita(citaSelec);
         t.setDescripcion(descripcion);
+        ControlTratamiento controlTratamiento = new ControlTratamiento();
+        boolean exito = controlTratamiento.agregarTratamiento(citaSelec, descripcion);
 
-        tratamientoDAO.agregar(t);
-        JOptionPane.showMessageDialog(this, "Tratamiento agregado.");
-        taObservaciones.setText("");
-        actualizarTablaTratamientos();
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Tratamiento agregado.");
+            taObservaciones.setText("");
+            tfMedicamento.setText("");
+            tfDosis.setText("");
+            actualizarTablaTratamientos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al agregar el tratamiento.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnConfirmar1ActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
@@ -305,19 +351,23 @@ public class FrmTratamiento extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Selecciona un tratamiento de la tabla.");
             return;
         }
-
-        int idTratamiento = (int) TbTrataminetos.getValueAt(fila, 0);
-        String descripcion = (String) TbTrataminetos.getValueAt(fila, 4); // Columna Descripcion editable
-
-        Tratamiento t = new Tratamiento();
-        t.setId_tratamiento(idTratamiento);
-        t.setDescripcion(descripcion);
-
-        tratamientoDAO.actualizar(t);
-        JOptionPane.showMessageDialog(this, "Tratamiento actualizado.");
-        actualizarTablaTratamientos();
-
-
+        try {
+            int idTratamiento = (int) TbTrataminetos.getValueAt(fila, 0);
+            int idCita = (int) TbTrataminetos.getValueAt(fila, 1); 
+            String nuevaDescripcion = (String) TbTrataminetos.getValueAt(fila, 4); 
+            Cita citaAsociada = new Cita();
+            citaAsociada.setId(idCita);
+            boolean exito = controlTratamiento.actualizarTratamiento(idTratamiento, citaAsociada, nuevaDescripcion);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Tratamiento actualizado correctamente.");
+                actualizarTablaTratamientos(); 
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al actualizar tratamiento.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar tratamiento: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
@@ -331,6 +381,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TbCitasPaciente;
     private javax.swing.JTable TbTrataminetos;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnConfirmar1;
@@ -344,6 +395,7 @@ public class FrmTratamiento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea taObservaciones;
     private javax.swing.JTextField tfDosis;
     private javax.swing.JTextField tfMedicamento;

@@ -27,7 +27,7 @@ public class ControlPacientes {
         }
 
         pacienteDAO.agregar(paciente);
-        
+
         return true;
     }
 
@@ -42,7 +42,7 @@ public class ControlPacientes {
     public List<Paciente> listarPacientes() {
         return pacienteDAO.listar();
     }
-    
+
     public boolean actualizarPaciente(Paciente paciente) {
         if (paciente.getId() <= 0) {
             System.err.println("ID de paciente inválido.");
@@ -65,12 +65,14 @@ public class ControlPacientes {
         return true;
     }
 
+    // Eliminar paciente con validación de ID
     public boolean eliminarPaciente(int idPaciente) {
         if (idPaciente <= 0) {
             System.err.println("ID de paciente inválido.");
             return false;
         }
-        pacienteDAO.eliminar(idPaciente);
+        pacienteDAO.eliminar(idPaciente); // This calls the DAO
         return true;
     }
+
 }

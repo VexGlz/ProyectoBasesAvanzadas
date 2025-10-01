@@ -5,7 +5,7 @@ public class Cita {
     private int id;
     private Paciente paciente;
     private Doctor doctor;
-    private String fecha;  
+    private String fecha;  // puedes cambiar a LocalDate si quieres
     private String motivo;
     private String estado;
 

@@ -46,12 +46,12 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="203" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnCitas" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnDoctores" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnPacientes" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnConsultar" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="btnConsultar" max="32767" attributes="0"/>
                               <Component id="btnMenu" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnPacientes" alignment="1" max="32767" attributes="0"/>
+                              <Component id="btnCitas" alignment="1" max="32767" attributes="0"/>
+                              <Component id="btnDoctores" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">

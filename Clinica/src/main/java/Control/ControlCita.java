@@ -19,6 +19,7 @@ public class ControlCita {
         this.citaDAO = new CitaDAO();
     }
 
+    // Insertar una nueva cita con validaciones
     public boolean agregarCita(Paciente paciente, Doctor doctor, String fecha, String motivo, String estado) {
         if (paciente == null) {
             System.err.println("El paciente es obligatorio.");
@@ -50,12 +51,13 @@ public class ControlCita {
         return true;
     }
 
+    // Obtener una cita por ID
     public Cita obtenerCita(int idCita) {
         if (idCita <= 0) {
             System.err.println("ID de cita inválido.");
             return null;
         }
-        return ((CitaDAO) citaDAO).obtenerPorId(idCita); // porque obtenerPorId no está en la interfaz
+        return ((CitaDAO) citaDAO).obtenerPorId(idCita);
     }
 
     public List<Cita> listarCitas() {

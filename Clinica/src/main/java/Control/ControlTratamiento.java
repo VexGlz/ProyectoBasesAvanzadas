@@ -29,7 +29,7 @@ public class ControlTratamiento {
         tratamientoDAO.agregar(tratamiento);
         return true;
     }
-    
+
     public List<Tratamiento> listarTratamientos() {
         return tratamientoDAO.listar();
     }
@@ -46,12 +46,10 @@ public class ControlTratamiento {
         if (descripcion == null) {
             descripcion = "";
         }
-
         Tratamiento tratamiento = new Tratamiento();
         tratamiento.setId_tratamiento(idTratamiento);
-        tratamiento.setCita(cita);
+        tratamiento.setCita(cita); 
         tratamiento.setDescripcion(descripcion.trim());
-
         tratamientoDAO.actualizar(tratamiento);
         return true;
     }

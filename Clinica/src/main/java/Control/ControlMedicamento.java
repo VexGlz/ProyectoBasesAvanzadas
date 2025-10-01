@@ -1,7 +1,7 @@
 package Control;
 
 import Dao.MedicamentoDAO;
-import Interfaces.IMedicamentoDAO;
+import InterfacesDAO.IMedicamentoDAO;
 import java.util.List;
 import modelo.Medicamento;
 import modelo.Tratamiento;
@@ -43,6 +43,7 @@ public class ControlMedicamento {
         medicamentoDAO.agregar(medicamento);
         return true;
     }
+
 
     public List<Medicamento> listarMedicamentos() {
         return medicamentoDAO.listar();

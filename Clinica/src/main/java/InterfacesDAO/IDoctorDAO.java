@@ -15,9 +15,9 @@ public interface IDoctorDAO {
 
     void agregar(Doctor doctor);
 
-    void actualizar(Doctor doctor);
+    boolean actualizar(Doctor doctor);
 
-    void eliminar(int id);
+    boolean eliminar(int id);
 
     Doctor obtenerPorId(int id);
 

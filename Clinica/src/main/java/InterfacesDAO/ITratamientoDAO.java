@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Interfaces;
+package InterfacesDAO;
 
 import java.util.List;
 import modelo.*;
@@ -18,6 +18,8 @@ public interface ITratamientoDAO {
     void actualizar(Tratamiento tratamiento);
 
     void eliminar(int id);
+
+    Tratamiento obtenerPorId(int id); 
 
     List<Tratamiento> listar();
 

@@ -45,7 +45,6 @@ public class PacienteDAO implements IPacienteDAO {
     public void actualizar(Paciente p) {
         String sql = "UPDATE Pacientes SET nombre=?, apellido=?, edad=?, sexo=?, direccion=?, telefono=?, correo=? WHERE id=?";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, p.getNombre());
             ps.setString(2, p.getApellido());
             ps.setInt(3, p.getEdad());
@@ -53,8 +52,8 @@ public class PacienteDAO implements IPacienteDAO {
             ps.setString(5, p.getDireccion());
             ps.setInt(6, p.getTelefono());
             ps.setString(7, p.getCorreo());
+            ps.setInt(8, p.getId());
             ps.executeUpdate();
-
         } catch (SQLException e) {
             System.err.println("Error al actualizar paciente: " + e.getMessage());
         }
@@ -68,6 +67,7 @@ public class PacienteDAO implements IPacienteDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error al eliminar paciente: " + e.getMessage());
+            // Consider re-throwing or returning false to indicate failure
         }
     }
 
@@ -90,7 +90,7 @@ public class PacienteDAO implements IPacienteDAO {
                 p.setSexo(rs.getString("sexo"));
                 p.setDireccion(rs.getString("direccion"));
                 p.setTelefono(rs.getInt("telefono"));
-                p.setCorreo(rs.getString("corrreo"));
+                p.setCorreo(rs.getString("correo"));
             }
 
         } catch (SQLException e) {

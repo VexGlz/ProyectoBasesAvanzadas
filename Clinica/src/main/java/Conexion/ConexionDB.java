@@ -26,7 +26,7 @@ public class ConexionDB {
     static {
         try (InputStream input = ConexionDB.class.getClassLoader()
                 .getResourceAsStream("db.properties")) {
-            
+
             Properties props = new Properties();
             if (input == null) {
                 throw new RuntimeException("No se encontró el archivo db.properties");
@@ -38,8 +38,9 @@ public class ConexionDB {
             password = props.getProperty("db.password");
             driver = props.getProperty("db.driver");
 
+            // Registrar driver
             Class.forName(driver);
-            
+
             String sqlPacientes = "CREATE TABLE IF NOT EXISTS Pacientes ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "nombre VARCHAR(100), "
@@ -57,38 +58,7 @@ public class ConexionDB {
                 System.out.println("Error: " + e.getMessage());
             }
 
-            String sqlCitas = "CREATE TABLE IF NOT EXISTS Citas ("
-                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "id_paciente INT NOT NULL, "
-                    + "id_doctor INT NOT NULL,"
-                    + "fecha DATE, "
-                    + "motivo VARCHAR(100), "
-                    + "estado VARCHAR(100), "
-                    + "FOREIGN KEY (id_paciente) REFERENCES Pacientes(id),"
-                    + "FOREIGN KEY (id_doctor) REFERENCES Doctor(id)"
-                    + ");";
-            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sqlCitas)) {
-                ps.execute();
-                System.out.println("Tabla Citas creada");
-            } catch (SQLException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-
-            String sqlTratamientos = "CREATE TABLE IF NOT EXISTS Tratamientos ("
-                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "id_citas INT NOT NULL, "
-                    + "id_doctor INT NOT NULL,"
-                    + "descripcion VARCHAR(100), "
-                    + "FOREIGN KEY (id_citas) REFERENCES Citas(id)"
-                    + ");";
-            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sqlTratamientos)) {
-                ps.execute();
-                System.out.println("Tabla Tratamientos creada");
-            } catch (SQLException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-            
-            String sqlDoctor= "CREATE TABLE IF NOT EXISTS Doctor ("
+            String sqlDoctor = "CREATE TABLE IF NOT EXISTS Doctor ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "nombre VARCHAR(100) NOT NULL, "
                     + "apellido VARCHAR(100), "
@@ -103,13 +73,45 @@ public class ConexionDB {
                 System.out.println("Error: " + e.getMessage());
             }
 
+            String sqlCitas = "CREATE TABLE IF NOT EXISTS Citas ("
+                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "id_paciente INT NOT NULL, "
+                    + "id_doctor INT NOT NULL,"
+                    + "fecha DATE, "
+                    + "motivo VARCHAR(100), "
+                    + "estado VARCHAR(100), "
+                    + "FOREIGN KEY (id_paciente) REFERENCES Pacientes(id) ON DELETE CASCADE,"
+                    + "FOREIGN KEY (id_doctor) REFERENCES Doctor(id) ON DELETE CASCADE"
+                    + ");";
+            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sqlCitas)) {
+                ps.execute();
+                System.out.println("Tabla Citas creada");
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+
+            String sqlTratamientos = "CREATE TABLE IF NOT EXISTS Tratamientos ("
+                    + "id INT AUTO_INCREMENT PRIMARY KEY, "
+                    + "id_citas INT NOT NULL, "
+                    + "id_doctor INT NOT NULL," 
+                    + "descripcion VARCHAR(100), "
+                    + "FOREIGN KEY (id_citas) REFERENCES Citas(id) ON DELETE CASCADE,"
+                    + "FOREIGN KEY (id_doctor) REFERENCES Doctor(id) ON DELETE CASCADE" 
+                    + ");";
+            try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sqlTratamientos)) {
+                ps.execute();
+                System.out.println("Tabla Tratamientos creada");
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+
             String sqlMedicamentos = "CREATE TABLE IF NOT EXISTS Medicamentos ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY, "
-                    + "id_tratamiento INT NOT NULL, "
+                    + "id_tratamiento INT NOT NULL, " 
                     + "descripcion VARCHAR(100), "
                     + "duracion VARCHAR(100), "
                     + "cantidad VARCHAR(100), "
-                    + "FOREIGN KEY (id_tratamiento) REFERENCES Tratamientos(id)"
+                    + "FOREIGN KEY (id_tratamiento) REFERENCES Tratamientos(id) ON DELETE CASCADE"
                     + ");";
             try (Connection con = getConnection(); PreparedStatement ps = con.prepareStatement(sqlMedicamentos)) {
                 ps.execute();
@@ -117,7 +119,7 @@ public class ConexionDB {
             } catch (SQLException e) {
                 System.out.println("Error: " + e.getMessage());
             }
-            
+
             System.out.println("Conexion exitosa");
 
         } catch (IOException | ClassNotFoundException ex) {
@@ -128,6 +130,4 @@ public class ConexionDB {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
     }
-  }        
-    
-
+}

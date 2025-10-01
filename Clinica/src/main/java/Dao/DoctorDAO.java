@@ -17,7 +17,7 @@ import java.util.List;
  * @author Josel
  */
 public class DoctorDAO implements IDoctorDAO {
-    
+
     @Override
     public void agregar(Doctor d) {
         String sql = "INSERT INTO Doctor(nombre, apellido, especialidad, telefono, correo) VALUES (?, ?, ?, ?, ?)";
@@ -40,8 +40,7 @@ public class DoctorDAO implements IDoctorDAO {
         }
     }
 
-    @Override
-    public void actualizar(Doctor d) {
+    public boolean actualizar(Doctor d) {
         String sql = "UPDATE Doctor SET nombre=?, apellido=?, especialidad=?, telefono=?, correo=? WHERE id=?";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -50,21 +49,29 @@ public class DoctorDAO implements IDoctorDAO {
             ps.setString(3, d.getEspecialidad());
             ps.setInt(4, d.getTelefono());
             ps.setString(5, d.getCorreo());
-            ps.executeUpdate();
+            ps.setInt(6, d.getId());
+
+            int filas = ps.executeUpdate();
+            return filas > 0; // devuelve true si se actualizó al menos una fila
 
         } catch (SQLException e) {
             System.err.println("Error al actualizar doctor: " + e.getMessage());
+            return false;
         }
     }
 
     @Override
-    public void eliminar(int id) {
+    public boolean eliminar(int id) {
         String sql = "DELETE FROM Doctor WHERE id=?";
         try (Connection conn = ConexionDB.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, id);
-            ps.executeUpdate();
+            int filas = ps.executeUpdate();
+            return filas > 0;
+
         } catch (SQLException e) {
             System.err.println("Error al eliminar doctor: " + e.getMessage());
+            return false;
         }
     }
 
@@ -85,7 +92,7 @@ public class DoctorDAO implements IDoctorDAO {
                 d.setApellido(rs.getString("apellido"));
                 d.setEspecialidad(rs.getString("especialidad"));
                 d.setTelefono(rs.getInt("telefono"));
-                d.setCorreo(rs.getString("corrreo"));
+                d.setCorreo(rs.getString("correo"));
             }
 
         } catch (SQLException e) {
